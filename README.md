@@ -1,14 +1,41 @@
-# Getting Started with GitHub Copilot
+# Mergington High School Management System API
 
-<img src="https://octodex.github.com/images/Professortocat_v2.png" align="right" height="200px" />
+Una API sencilla construida con FastAPI para gestionar actividades extracurriculares en la escuela secundaria Mergington.
 
-Hey @afmolinaj!
+## Características
 
-Mona here. I'm done preparing your exercise. Hope you enjoy! 💚
+- Ver actividades disponibles.
+- Inscribirse en actividades.
+- Cancelar inscripción en actividades.
 
-Remember, it's self-paced so feel free to take a break! ☕️
+## Instalación
 
-[![](https://img.shields.io/badge/Go%20to%20Exercise-%E2%86%92-1f883d?style=for-the-badge&logo=github&labelColor=197935)](https://github.com/afmolinaj/skills-getting-started-with-github-copilot/issues/1)
+1. Clona el repositorio.
+2. Instala las dependencias:
+   ```bash
+   pip3 install fastapi uvicorn
+   ```
+3. Ejecuta la aplicación:
+   ```bash
+   uvicorn src.app:app --reload
+   ```
+
+## Pruebas
+
+1. Instala dependencias de prueba:
+   ```bash
+   pip3 install pytest httpx
+   ```
+2. Ejecuta las pruebas:
+   ```bash
+   pytest
+   ```
+
+## Endpoints principales
+
+- `GET /activities`: Lista todas las actividades.
+- `POST /activities/{activity_name}/signup?email=...`: Inscribe a un estudiante.
+- `POST /activities/{activity_name}/unregister?email=...`: Da de baja a un estudiante.
 
 ---
 
