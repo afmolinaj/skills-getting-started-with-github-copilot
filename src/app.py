@@ -3,6 +3,11 @@ High School Management System API
 
 A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
+
+Endpoints:
+- GET /activities: List all activities.
+- POST /activities/{activity_name}/signup?email=...: Sign up a student.
+- POST /activities/{activity_name}/unregister?email=...: Unregister a student.
 """
 
 from fastapi import FastAPI, HTTPException
@@ -88,12 +93,24 @@ def root():
 
 @app.get("/activities")
 def get_activities():
+    """Return all available activities with details."""
     return activities
 
 
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
-    """Sign up a student for an activity"""
+    """Sign up a student for an activity.
+
+    Args:
+        activity_name (str): The name of the activity.
+        email (str): The student's email.
+
+    Returns:
+        dict: Confirmation message.
+
+    Raises:
+        HTTPException: If email is missing or activity does not exist.
+    """
 
     # Validate student is not already signed up
     if not email:
@@ -109,3 +126,32 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+@app.post("/activities/{activity_name}/unregister")
+def unregister_from_activity(activity_name: str, email: str):
+    """Unregister a student from an activity.
+
+    Args:
+        activity_name (str): The name of the activity.
+        email (str): The student's email.
+
+    Returns:
+        dict: Confirmation message.
+
+    Raises:
+        HTTPException: If email is missing, activity does not exist, or email is not registered.
+    """
+    # Validar que el email sea proporcionado
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    # Validar que la actividad exista
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+    activity = activities[activity_name]
+    # Validar que el email esté registrado en la actividad
+    if email not in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Email not registered in this activity")
+    # Eliminar el email de la lista de participantes
+    activity["participants"].remove(email)
+    return {"message": f"{email} has been unregistered from {activity_name}"}
